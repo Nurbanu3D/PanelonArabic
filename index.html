@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>كتالوج المنتجات ثلاثية الأبعاد</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #222327, #121417);
+            color: #f5f5f5;
+            font-family: 'Segoe UI', Arial;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 25px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 30px;
+            font-size: 28px;
+        }
+
+        .section-title {
+            margin-top: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px;
+        }
+
+        .item {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 15px;
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .item:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            model-viewer {
+                height: 280px;
+            }
+        }
+
+        .title {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .price {
+            text-align: center;
+            color: #aaa;
+        }
+
+        .btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            width: 80%;
+            max-width: 900px;
+            background: #111;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .modal model-viewer {
+            height: 400px;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+        }
+
+        .top-logo {
+            width: 250px;
+            height: auto;
+        }
+
+        .color-palette-section {
+            margin: 40px 30px 0;
+            padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .color-palette-title {
+            margin: 0 0 18px;
+            font-size: 24px;
+            color: #f5f5f5;
+        }
+
+        .color-swatches {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-swatch {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            background-color: var(--swatch-color, #ffffff);
+            background-image: var(--swatch-image, none);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .color-swatch::before,
+        .color-swatch::after {
+            content: none;
+        }
+
+        .color-label {
+            font-size: 13px;
+            color: #e8e8e8;
+            text-align: center;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 85px;
+        }
+
+        .catalog-footer {
+            margin-top: 70px;
+            padding: 30px;
+            border-top: 1px solid #050505;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #121417;
+            color: #8990f8;
+        }
+
+        .footer-logo {
+            width: 120px;
+            height: auto;
+        }
+
+        .footer-info {
+            text-align: center;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .footer-info h3 {
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .footer-info p {
+            color: #c5c5c5;
+            margin: 5px 0;
+        }
+
+        .footer-design {
+            color: #ffdf70;
+            font-weight: 700;
+            text-shadow: 0 0 6px rgba(255, 223, 112, 0.25);
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .footer-design-line {
+            display: inline-block;
+            border-bottom: 2px solid #ffdf70;
+            padding-bottom: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/PANELON-PNGBEYAZ.png"
+                alt="PANELON Logo" class="top-logo">
+        </div>
+
+        <h1>PANELON كتالوج ثلاثي الأبعاد</h1>
+        <h2>المنتجات الداخلية</h2>
+
+        <div class="grid">
+
+            <!-- PRODUCT 01 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikilihampanel.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة خام بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikilihampanel.glb',
+            'لوحة خام بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 02 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeli.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة بتغطية نصفية بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeli.glb',
+            'لوحة بتغطية نصفية بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 03 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liboyal%C4%B1.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة جدارية مطلية بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liboyal%C4%B1.glb',
+            'لوحة جدارية مطلية بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 04 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2bolmelitamkaplamali.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2bolmelitamkaplamali.glb',
+            'لوحة مكسوة بالكامل بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 05 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liantrasit.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مطلية بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liantrasit.glb',
+            'لوحة مطلية بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 06 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2livizon.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مطلية بقسمين</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2livizon.glb',
+            'لوحة مطلية بقسمين',
+            '14.30 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 07 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ucluhampanel.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة خام بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ucluhampanel.glb',
+            'لوحة خام بثلاثة أقسام',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 08 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeliwood.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة بتغطية نصفية بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeliwood.glb',
+            'لوحة بتغطية نصفية بثلاثة أقسام',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 09 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/griboyali3lu.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة جدارية مطلية بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/griboyali3lu.glb',
+            'لوحة جدارية مطلية بثلاثة أقسام',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 10 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/3bolmelitamkaplama.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/3bolmelitamkaplama.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 11 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/embrossluceviz.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/embrossluceviz.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام - جوز بنقشة بارزة',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 12 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/traverten.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/traverten.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام - ترافرتين',
+            '16.80 سم × 280 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 13 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrimese.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح أبواب</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrimese.glb',
+            'ألواح أبواب مكسوة',
+            'ألواح 20 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 14 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrisade.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح أبواب خام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrisade.glb',
+            'ألواح أبواب خام',
+            'ألواح 20 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 15 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/sadetavanlambri.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح سقف</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/sadetavanlambri.glb',
+            'ألواح سقف خام',
+            '20 سم، بمجرى واحد',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 16 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/renklitavan.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح سقف مطلية بالألوان</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/renklitavan.glb',
+            'ألواح سقف مطلية بالألوان',
+            '20 سم، بمجرى واحد',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 17 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosesade.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">بروفيل إطار خام</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosesade.glb',
+            'بروفيل إطار خام',
+            'إطار باب 60/90 - 60/150',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 18 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosedoku.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">بروفيل إطار مكسو</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosedoku.glb',
+            'بروفيل إطار مكسو',
+            'إطار باب 60/90 - 60/150',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 19 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/kornis-3d/main/kornis.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">كورنيش</div>
+                <div class="price">المنتجات الداخلية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/kornis-3d/main/kornis.glb',
+            'كورنيش',
+            'بمسارين وثلاثة مسارات',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">المنتجات الخارجية</h2>
+
+        <div class="grid">
+
+            <!-- PRODUCT 01 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikilihampanel.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة خام بقسمين</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikilihampanel.glb',
+            'لوحة خام بقسمين',
+            '14.30 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 02 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeli.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة بتغطية نصفية بقسمين</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeli.glb',
+            'لوحة بتغطية نصفية بقسمين',
+            '14.30 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 03 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2bolmelitamkaplamali.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بقسمين</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2bolmelitamkaplamali.glb',
+            'لوحة مكسوة بالكامل بقسمين',
+            '14.30 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 04 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liantrasit.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بقسمين</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2liantrasit.glb',
+            'لوحة مكسوة بقسمين',
+            '14.30 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 05 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2livizon.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بقسمين</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/2livizon.glb',
+            'لوحة مكسوة بقسمين',
+            '14.30 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 06 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ucluhampanel.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة خام بثلاثة أقسام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ucluhampanel.glb',
+            'لوحة خام بثلاثة أقسام',
+            '16.80 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 07 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeliwood.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة بتغطية نصفية بثلاثة أقسام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/ikibolmeliwood.glb',
+            'لوحة بتغطية نصفية بثلاثة أقسام',
+            '16.80 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 08 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/3bolmelitamkaplama.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/3bolmelitamkaplama.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام',
+            '16.80 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 09 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/embrossluceviz.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/embrossluceviz.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام - جوز بنقشة بارزة',
+            '16.80 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 10 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/traverten.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">لوحة مكسوة بالكامل بثلاثة أقسام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/traverten.glb',
+            'لوحة مكسوة بالكامل بثلاثة أقسام - ترافرتين',
+            '16.80 سم × 320 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 11 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrimese.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح أبواب مكسوة</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrimese.glb',
+            'ألواح أبواب مكسوة',
+            'ألواح 20 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 12 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrisade.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح أبواب خام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/lambrisade.glb',
+            'ألواح أبواب خام',
+            'ألواح 20 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 13 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/sadetavanlambri.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح سقف خام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/sadetavanlambri.glb',
+            'ألواح سقف خام',
+            '20 سم، بمجرى واحد',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 14 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/renklitavan.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">ألواح سقف مطلية</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/renklitavan.glb',
+            'ألواح سقف مطلية',
+            '20 سم، بمجرى واحد',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 15 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosesade.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">بروفيل إطار خام</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosesade.glb',
+            'بروفيل إطار خام',
+            '60/90 - 60/150',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 16 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosedoku.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">بروفيل إطار مكسو</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/Lkosedoku.glb',
+            'بروفيل إطار مكسو',
+            '60/90 - 60/150',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 17 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/filebake.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">زاوية شبكية</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/filebake.glb',
+            'زاوية شبكية',
+            '7×7 - 65 غرام',
+            '7×7 - 110 غرام'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 18 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazfile.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">زاوية شبكية بيضاء</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazfile.glb',
+            'زاوية شبكية بيضاء',
+            '110 غرام - 2.5 متر',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 19 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/fileprofil.glb"
+                    auto-rotate camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">بروفيل بدون شبكة</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/fileprofil.glb',
+            'بروفيل بدون شبكة',
+            '110 غرام - 2.5 متر',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+
+            <!-- PRODUCT 20 -->
+            <div class="item">
+                <model-viewer src="https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/serencrp.glb" auto-rotate
+                    camera-controls disable-tap camera-target="auto auto auto"></model-viewer>
+                <div class="title">حشوة باب Seren Crp</div>
+                <div class="price">المنتجات الخارجية</div>
+                <button class="btn" onclick="openModal(
+            'https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/serencrp.glb',
+            'حشوة باب Seren Crp',
+            '2500 كغ - 210 سم',
+            '--------'
+        )">التفاصيل</button>
+            </div>
+        </div>
+
+        <!-- MODAL -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">✖</span>
+
+                <model-viewer id="modalModel" auto-rotate camera-controls disable-tap
+                    camera-target="auto auto auto"></model-viewer>
+
+                <h2 id="modalTitle"></h2>
+                <p id="modalDesc"></p>
+                <p id="modalPrice"></p>
+            </div>
+        </div>
+
+        <script>
+            function openModal(src, title, desc, price) {
+                document.getElementById("modal").style.display = "flex";
+                document.getElementById("modalModel").src = src;
+                document.getElementById("modalTitle").innerText = title;
+                document.getElementById("modalDesc").innerText = desc;
+                document.getElementById("modalPrice").innerText = price;
+            }
+
+            function closeModal() {
+                document.getElementById("modal").style.display = "none";
+            }
+        </script>
+
+        <section class="color-palette-section">
+            <h3 class="color-palette-title">خيارات ألوان (تغطية) ألواح الجدران الداخلية ذات القسمين والثلاثة أقسام</h3>
+            <div class="color-swatches">
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #7b4d2e; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyumese.jpg');"></div>
+                    <div class="color-label">بلوط داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #d9c4a7; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/acikkayac.jpg');"></div>
+                    <div class="color-label">حجر فاتح</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #7d7168; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyukayac.jpg');"></div>
+                    <div class="color-label">حجر داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #4b4e52; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyubeton.jpg');"></div>
+                    <div class="color-label">خرسانة داكنة</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #5a2a22; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyuceviz.jpg');"></div>
+                    <div class="color-label">جوز داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #d9a54a; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/altinmese.jpg');"></div>
+                    <div class="color-label">بلوط ذهبي</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #8e6b35; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyualtinmese.jpg');"></div>
+                    <div class="color-label">بلوط ذهبي داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #4d4d4d; --swatch-image: none;"></div>
+                    <div class="color-label">أنثراسيت</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #fffefe; --swatch-image: none;"></div>
+                    <div class="color-label">أبيض كريستالي</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #b37647; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/findik.jpg');"></div>
+                    <div class="color-label">بندق</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="color-palette-section">
+            <h3 class="color-palette-title">خيارات ألوان (تغطية) ألواح الجدران الخارجية ذات القسمين والثلاثة أقسام</h3>
+            <div class="color-swatches">
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #5a2a22; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyuceviz.jpg');"></div>
+                    <div class="color-label">جوز داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #d9a54a; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/altinmese.jpg');"></div>
+                    <div class="color-label">بلوط ذهبي</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #8e6b35; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyualtinmese.jpg');"></div>
+                    <div class="color-label">بلوط ذهبي داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #4d4d4d; --swatch-image: none;"></div>
+                    <div class="color-label">أنثراسيت</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #7b4d2e; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/koyumese.jpg');"></div>
+                    <div class="color-label">بلوط داكن</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #b37647; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/findik.jpg');"></div>
+                    <div class="color-label">بندق</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="color-palette-section">
+            <h3 class="color-palette-title">خيارات ألوان (طلاء) ألواح السقف</h3>
+            <div class="color-swatches">
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #bfc3bf; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/griakcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب رمادي</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #f5f5f1; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazakcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب أبيض</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #b8b6b2; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/gribudakliakca.jpeg');"></div>
+                    <div class="color-label">قيقب رمادي بعروق</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #e6e0d7; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazbudakl%C4%B1akcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب أبيض بعروق</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #f7f7f7; --swatch-image: none;"></div>
+                    <div class="color-label">أبيض (خام)</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #4d4d4d; --swatch-image: none;"></div>
+                    <div class="color-label">أنثراسيت</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="color-palette-section">
+            <h3 class="color-palette-title">خيارات ألوان (طلاء) ألواح الجدران الداخلية ذات القسمين والثلاثة أقسام</h3>
+            <div class="color-swatches">
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #bfc3bf; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/griakcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب رمادي</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #15287e; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazakcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب أبيض</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #b8b6b2; --swatch-image:url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/gribudakliakca.jpeg');"></div>
+                    <div class="color-label">قيقب رمادي بعروق</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #661f1f; --swatch-image: url('https://raw.githubusercontent.com/Nurbanu3D/2-b-lmeli/main/beyazbudakl%C4%B1akcaagac.jpeg');"></div>
+                    <div class="color-label">قيقب أبيض بعروق</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #f7f7f7; --swatch-image: none;"></div>
+                    <div class="color-label">أبيض (خام)</div>
+                </div>
+
+                <div class="color-item">
+                    <div class="color-swatch" style="--swatch-color: #4d4d4d; --swatch-image: none;"></div>
+                    <div class="color-label">أنثراسيت</div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer class="catalog-footer">
+            <div class="footer-info">
+
+                <h3>
+                    تُستخدم في ألواح الجدران لدينا مواد تغطية أسطح زخرفية تعكس الجودة العالية
+                    والتصميم الجمالي. ويتم توفير جميع مواد التغطية لدينا بعناية من العلامات التجارية
+                    الرائدة في القطاع، LG (Hyundai LG) وLegno Deco، مما يمنح منتجاتنا جودة سطح عالية،
+                    ومظهراً أنيقاً، ومتانة طويلة الأمد.
+                </h3>
+
+                <h3>
+                    بالإضافة إلى الألوان القياسية، يتم التصنيع حسب المشروع وبالأبعاد والمقاسات المطلوبة.
+                </h3>
+
+                <h3>
+                    منطقة مالكوي باشكنت OSB، الحي 19، شارع 19، رقم: 38، سينجان / أنقرة
+                </h3>
+
+                <h3>
+                    <strong>الهاتف:</strong> 0312 512 01 06 - 116
+                    <strong>الجوال:</strong> 0532 488 12 35
+                </h3>
+
+                <h3>
+                    www.panelon.com.tr / Instagram: srzpanelon
+                </h3>
+
+                <h3 class="footer-design">
+                    <strong>تصميم الكتالوج</strong>
+                </h3>
+
+                <p>boydagnurbanu@gmail.com</p>
+
+                <p>
+                    تم تصميمه بواسطة <strong>Nurbanu Boydağ</strong> لصالح PANELON A.Ş.
+                </p>
+
+            </div>
+        </footer>
+
+    </body>
+
+</html>
